@@ -137,12 +137,15 @@ class Script {
   /// executable name. All other arguments are forwarded to [Process.start].
   ///
   /// [the README]: https://github.com/google/dart_cli_script/blob/main/README.md#argument-parsing
-  factory Script(String executableAndArgs,
-      {List<String>? args,
-      String? name,
-      String? workingDirectory,
-      Map<String, String>? environment,
-      bool includeParentEnvironment = true}) {
+  factory Script(
+    String executableAndArgs, {
+    List<String>? args,
+    String? name,
+    String? workingDirectory,
+    Map<String, String>? environment,
+    bool includeParentEnvironment = true,
+    ProcessStartMode mode = ProcessStartMode.normal,
+  }) {
     var parsedExecutableAndArgs = parseArgs(executableAndArgs);
 
     return Script.fromComponents(name ?? p.basename(parsedExecutableAndArgs[0]),
@@ -151,7 +154,8 @@ class Script {
           [...parsedExecutableAndArgs.skip(1), ...?args],
           workingDirectory: workingDirectory,
           environment: environment,
-          includeParentEnvironment: includeParentEnvironment);
+          includeParentEnvironment: includeParentEnvironment,
+          mode: mode);
 
       return ScriptComponents(
           process.stdin, process.stdout, process.stderr, process.exitCode);
